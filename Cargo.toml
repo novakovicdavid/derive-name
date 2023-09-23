@@ -9,4 +9,4 @@ repository = "https://github.com/abineo-ag/derive-name"
 exclude = ["target", ".github"]
 
 [dependencies]
-derive-name-macros = "1"
+derive-name-macros = { path = "macros" }

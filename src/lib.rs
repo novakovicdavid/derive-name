@@ -49,7 +49,7 @@
 //! assert_eq!(Alice::Bob.variant_name(), "Bob");
 //! ```
 
-pub use derive_name_macros::{Name, VariantName};
+pub use derive_name_macros::{Name, with_name, VariantName};
 
 pub trait Name {
     fn name() -> &'static str;
@@ -124,5 +124,20 @@ mod variant_name {
         assert_eq!(Enum::Alice.variant_name(), "Alice");
         assert_eq!(Enum::Bob(1).variant_name(), "Bob");
         assert_eq!(Enum::Claire { i: 1 }.variant_name(), "Claire");
+    }
+}
+
+#[cfg(test)]
+mod custom_name {
+    use crate::with_name;
+    use crate as derive_name;
+    use crate::Named;
+
+    #[with_name(cool)]
+    struct Struct;
+
+    #[test]
+    fn test() {
+        assert_eq!(Struct.name(), "cool");
     }
 }

@@ -2,7 +2,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{self, parse_quote, Arm, Data};
 
-#[proc_macro_derive(Name)]
+#[proc_macro_derive(Name, attributes(with_name))]
 pub fn name(input: TokenStream) -> TokenStream {
     let ast: syn::DeriveInput = syn::parse_macro_input!(input);
     let ident = &ast.ident;
@@ -13,6 +13,24 @@ pub fn name(input: TokenStream) -> TokenStream {
             }
         }
     };
+    gen.into()
+}
+
+#[proc_macro_attribute]
+pub fn with_name(attr: TokenStream, input: TokenStream) -> TokenStream {
+    let ast: syn::DeriveInput = syn::parse_macro_input!(input);
+    let ident = &ast.ident;
+    let name = attr.to_string();
+    let gen = quote! {
+        #ast
+
+        impl derive_name::Name for #ident {
+            fn name() -> &'static str {
+                #name
+            }
+        }
+    };
+
     gen.into()
 }
 
